@@ -32,9 +32,6 @@
 
 #if DEVICE_I2C
 
-#ifndef USE_STM32F4XX_HAL_I2C__FIX
-#error Please use stm32f4xx_hal_i2c__FIX.c
-#endif
 
 #include "cmsis.h"
 #include "pinmap.h"
