@@ -62,8 +62,8 @@
 #endif
 
 #define UART_NUM (8)
-#define UART_STATE_RX_ACTIVE 0x20
-#define UART_STATE_TX_ACTIVE 0x10
+#define UART_STATE_RX_ACTIVE 0x01
+#define UART_STATE_TX_ACTIVE 0x02
 
 #if DEVICE_SERIAL_ASYNCH_DMA
 
@@ -1250,7 +1250,7 @@ uint8_t serial_tx_active(serial_t *obj)
 {
     MBED_ASSERT(obj);
     UART_HandleTypeDef *handle = &UartHandle[SERIAL_OBJ(module)];
-    return ((HAL_UART_GetState(handle) & UART_STATE_TX_ACTIVE) ? 1 : 0);
+    return (((HAL_UART_GetState(handle)& ~(0x20)) & UART_STATE_RX_ACTIVE) ? 1 : 0);
 }
 
 /** Attempts to determine if the serial peripheral is already in use for RX
@@ -1262,7 +1262,7 @@ uint8_t serial_rx_active(serial_t *obj)
 {
     MBED_ASSERT(obj);
     UART_HandleTypeDef *handle = &UartHandle[SERIAL_OBJ(module)];
-    return ((HAL_UART_GetState(handle) & UART_STATE_RX_ACTIVE) ? 1 : 0);
+    return (((HAL_UART_GetState(handle)& ~(0x20)) & UART_STATE_RX_ACTIVE) ? 1 : 0);
 }
 
 /** The asynchronous TX and RX handler.
